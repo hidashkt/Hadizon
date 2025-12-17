@@ -1,9 +1,13 @@
 from django.shortcuts import render
 from . models import product as Product
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+from customers.urls import *
 
 # Create your views here.
 
+
+@login_required(login_url='customer/account')
 def index(request):
     feutured_products=Product.objects.order_by('priority')[:4]
     latest_products=Product.objects.order_by('-id')[:4]
