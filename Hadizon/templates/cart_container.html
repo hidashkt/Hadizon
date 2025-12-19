@@ -2,7 +2,7 @@
 
 
 <div class="small-container cart-page">
-    {% if cart %}
+    {% if cart_items %}
         <table>
             <tbody><tr>
                 <th>Product</th>
@@ -10,21 +10,21 @@
                 <th>Subtotal</th>
             </tr>
 
-            {% for cart_item in cart.added_items.all %}
+            {% for item in cart_items %}
             <tr>
                 <td>
                     <div class="cart-info">
-                        <img src="{{ cart_item.product.product.product.image.url }}">
+                        <img src="{{ item.product.image.url }}">
                         <div>
-                            <p>{{ cart_item.product.title }}</p>
-                            <small>Price: ₹{{ cart_item.product.price }}</small>
+                            <p>{{ item.product.title }}</p>
+                            <small>Price: ₹{{ item.product.price }}</small>
                             <br>
                             <a href="">Remove</a>
                         </div>
                     </div>
                 </td>
-                <td><input type="number" disabled value="{{ cart_item.product.quantity }}"></td>
-                <td>₹{{ cart_item.product.price }}</td>
+                <td><input type="number" disabled value="{{ item.quantity }}"></td>
+                <td>₹{{ item.product.price }}</td>
             </tr>
             {% endfor %}
           

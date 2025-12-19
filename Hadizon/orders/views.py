@@ -6,14 +6,21 @@ from products.models import product as Product
 
 @login_required(login_url="account")
 def show_cart(request):
-    user=request.user
-    customer=user.customer_profile
-    cart_obj,created=Order.objects.get_or_create(
+    customer = request.user.customer_profile
+
+    cart_obj, created = Order.objects.get_or_create(
         owner=customer,
         order_status=Order.CART_STAGE
-       )
-    context={'cart':cart_obj}
-    return render(request,'cart.html')
+    )
+
+    cart_items = OrderedItem.objects.filter(owner=cart_obj)
+
+    context = {
+        'cart': cart_obj,
+        'cart_items': cart_items
+    }
+
+    return render(request, 'cart.html', context)
 
 @login_required(login_url="account")
 def add_to_cart(request):
@@ -32,4 +39,10 @@ def add_to_cart(request):
             owner=cart_obj,
             quantity=quantity,
         )
+        if created:
+            ordered_item.quantity=quantity
+            ordered_item.save()
+        else:
+            ordered_item.quantity=ordered_item.quantity+quantity
+            ordered_item.save()
     return redirect('cart')
