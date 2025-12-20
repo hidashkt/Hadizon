@@ -34,7 +34,7 @@ def add_to_cart(request):
             order_status=Order.CART_STAGE
         )
         product=Product.objects.get(pk=product_id)
-        ordered_item=OrderedItem.objects.create(
+        ordered_item=OrderedItem.objects.get_or_create(
             product=product,
             owner=cart_obj,
             quantity=quantity,
