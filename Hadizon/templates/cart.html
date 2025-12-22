@@ -2,5 +2,25 @@
 
 
 {% block content %}
+
+{% if messages %}
+                    <div style="    background: #fff;
+    width: 300px;
+    height:fit-content;
+    position: relative;
+    text-align: center;
+    padding: 20px 0;
+    margin: auto;
+    box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+     
+    ">
+                        {% for message in messages %}
+                       <li class="{{ message.tags }}"> {{ message }} </li>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+
     {% include "cart_container.html" %}
 {% endblock content %}

@@ -1,4 +1,9 @@
 {% load static %}
+{% load multiply %}
+{% load gettotal %}
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 
 
 <div class="small-container cart-page">
@@ -19,34 +24,55 @@
                             <p>{{ item.product.title }}</p>
                             <small>Price: ₹{{ item.product.price }}</small>
                             <br>
-                            <a href="">Remove</a>
+                            <a href="{% url 'remove_item' item.id %}">Remove</a>
                         </div>
                     </div>
                 </td>
-                <td><input type="number" disabled value="{{ item.quantity }}"></td>
-                <td>₹{{ item.product.price }}</td>
+                <td><input style="width: 50px;" type="number" disabled value="{{ item.quantity }}"></td>
+                <td>₹{% multiply item.product.price item.quantity %}</td>
             </tr>
             {% endfor %}
           
         </tbody></table>
         <div class="total-price">
             <table>
-                <tbody><tr>
-                    <td>Subtotal</td>
-                    <td>$200.00</td>
-                </tr>
-                <tr>
-                    <td>Tax</td>
-                    <td>$35.00</td>
-                </tr>
+                <tbody>
                 <tr>
                     <td>Total</td>
-                    <td>$230.00</td>
+                    <td>₹{% gettotal cart %}</td>
                 </tr>
             </tbody></table>
+            
         </div>
+        <br>
+        <form action="{% url 'checkout' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="total" value="{% gettotal cart %}"/>
+            <button  type="submit"  class="btn">Checkout</button>
+        </form>
+            
     {% else %}
-        <p>Cart Empty!</p>
+        <i class="fa fa-shopping-cart" style="font-size:48px; margin-top: 100px;">Empty!</i>
+
+        <div class="total-price" style="margin-top: 300px;">
+            <table>
+                <tbody>
+                <tr>
+                    <td>Total</td>
+                    <td>₹ 0</td>
+                </tr>
+            </tbody></table>
+            
+        </div>
+         <br>
+         <form action="{% url 'checkout' %}" method="post" enctype="multipart/form-data" style="width: 130px;">
+            {% csrf_token %}
+            <input type="hidden" name="total" value="{% gettotal cart %}"/>
+            <button  type="submit" class="btn">Checkout</button>
+        </form>
+       
+           
+            
     
     {% endif %}
     </div>
